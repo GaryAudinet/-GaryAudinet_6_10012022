@@ -27,8 +27,8 @@ exports.login = (req, res, next) => {
       }
       bcrypt
         .compare(req.body.password, user.password)
-        .then((IsValid) => {
-          if (!IsValid) {
+        .then((Valid) => {
+          if (!Valid) {
             return res.status(401).json({ error: 'Incorrect password.' });
           }
           res.status(200).json({
