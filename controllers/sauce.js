@@ -13,7 +13,7 @@ exports.createSauce = (req, res, next) => {
   });
   sauce
     .save()
-    .then(() => res.status(201).json({ message: 'Saved sauce.' }))
+    .then(() => res.status(201).json({ message: 'Create sauce.' }))
     .catch((error) => res.status(400).json({ error }));
 };
 
@@ -24,20 +24,40 @@ exports.readSauce = (req, res, next) => {
 };
 
 exports.updateSauce = (req, res, next) => {
-    const sauceObject = req.file
-    ? {
-        ...JSON.parse(req.body.sauce),
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${
-          req.file.filename
-        }`,
-      }
-    : { ...req.body };
-  Sauce.updateOne(
-    { _id: req.params.id },
-    { ...sauceObject, _id: req.params.id }
-  )
-    .then(() => res.status(200).json({ message: 'Updated sauce.' }))
-    .catch((error) => res.status(400).json({ error }));
+  if (req.file) {
+    Sauce.findOne({ _id: req.params.id })
+      .then((sauce) => {
+        // Delete the previous image before saving the new one
+        const fileName = sauce.imageUrl.split('/images/')[1];
+        fs.unlink(`images/${fileName}`, () => {
+          const sauceObject = {
+            ...JSON.parse(req.body.sauce),
+            imageUrl: `${req.protocol}://${req.get('host')}/images/${
+              req.file.filename
+            }`,
+          };
+          Sauce.updateOne(
+            { _id: req.params.id },
+            { ...sauceObject, _id: req.params.id }
+          )
+            .then(() =>
+              res.status(200).json({ message: 'Update sauce.' })
+            )
+            .catch((error) => res.status(400).json({ error }));
+        });
+      })
+      .catch((error) => res.status(500).json({ error }));
+  } else {
+    const sauceObject = { ...req.body };
+    Sauce.updateOne(
+      { _id: req.params.id },
+      { ...sauceObject, _id: req.params.id }
+    )
+      .then(() =>
+        res.status(200).json({ message: 'Update sauce.' })
+      )
+      .catch((error) => res.status(400).json({ error }));
+  }
 };
 
 exports.deleteSauce = (req, res, next) => {
@@ -47,7 +67,7 @@ exports.deleteSauce = (req, res, next) => {
       fs.unlink(`images/${filename}`, () => {
         Sauce.deleteOne({ _id: req.params.id })
           .then(() =>
-            res.status(200).json({ message: 'Sauce deleted successfully.' })
+            res.status(200).json({ message: 'Delete sauce.' })
           )
           .catch((error) => res.status(400).json({ error }));
       });
@@ -70,7 +90,7 @@ exports.likeDislike = (req, res, next) => {
           { $push: { usersLiked: req.body.userId }, $inc: { likes: +1 } }
         )
           .then(() =>
-            res.status(200).json({ message: 'Like added.' })
+            res.status(200).json({ message: 'Like add.' })
           )
           .catch((error) => res.status(400).json({ error }));
         break;
@@ -83,7 +103,7 @@ exports.likeDislike = (req, res, next) => {
                 { $pull: { usersLiked: req.body.userId }, $inc: { likes: -1 } }
               )
                 .then(() =>
-                  res.status(200).json({ message: 'Like deleted.' })
+                  res.status(200).json({ message: 'Like delete.' })
                 )
                 .catch((error) => res.status(400).json({ error }));
             }
@@ -98,7 +118,7 @@ exports.likeDislike = (req, res, next) => {
                 .then(() =>
                   res
                     .status(200)
-                    .json({ message: 'Dislike deleted.' })
+                    .json({ message: 'Dislike delete.' })
                 )
                 .catch((error) => res.status(400).json({ error }));
             }
@@ -111,7 +131,7 @@ exports.likeDislike = (req, res, next) => {
           { $push: { usersDisliked: req.body.userId }, $inc: { dislikes: +1 } }
         )
           .then(() => {
-            res.status(200).json({ message: 'Dislike added.' });
+            res.status(200).json({ message: 'Dislike add.' });
           })
           .catch((error) => res.status(400).json({ error }));
         break;
