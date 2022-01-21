@@ -5,6 +5,8 @@ const path = require('path');
 
 const dotenv = require('dotenv');
 dotenv.config();
+const helmet = require('helmet');
+app.use(helmet());
 
 const userRoutes = require('./routes/user');
 const sauceRoutes = require('./routes/sauce');
