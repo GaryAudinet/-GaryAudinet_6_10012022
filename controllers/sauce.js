@@ -1,5 +1,9 @@
+// Import des packages requis, et le model Sauce
+
 const Sauce = require('../models/sauce');
 const fs = require('fs');
+
+// Exports des logiques pour chaques requetes POST, GET, PUT, et DELETE
 
 exports.createSauce = (req, res, next) => {
   const sauceObject = JSON.parse(req.body.sauce);
@@ -27,7 +31,6 @@ exports.updateSauce = (req, res, next) => {
   if (req.file) {
     Sauce.findOne({ _id: req.params.id })
       .then((sauce) => {
-        // Delete the previous image before saving the new one
         const fileName = sauce.imageUrl.split('/images/')[1];
         fs.unlink(`images/${fileName}`, () => {
           const sauceObject = {
@@ -80,6 +83,8 @@ exports.readAllSauces = (req, res, next) => {
     .then((sauces) => res.status(200).json(sauces))
     .catch((error) => res.status(400).json({ error }));
 };
+
+// Exports des logiques pour les fonctions "like" et "dislike"
 
 exports.likeDislike = (req, res, next) => {
     const like = req.body.like;

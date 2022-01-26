@@ -1,4 +1,8 @@
+// Import des packages requis
+
 const mongoose = require('mongoose');
+
+// Creation du schema pour les sauces, puis son exports
 
 const sauceSchema = mongoose.Schema({
   userId: { type: String, required: true },

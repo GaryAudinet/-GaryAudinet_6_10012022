@@ -1,7 +1,11 @@
+// Import des packages requis
+
 const jwt = require('jsonwebtoken');
 
 const dotenv = require('dotenv');
 dotenv.config();
+
+// Export le middleware d'anthentification
 
 module.exports = (req, res, next) => {
   try {

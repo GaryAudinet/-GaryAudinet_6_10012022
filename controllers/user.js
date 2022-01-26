@@ -1,3 +1,5 @@
+// Import des packages requis, et le model User
+
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -5,6 +7,8 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const User = require('../models/user');
+
+// Exports des logiques d'inscription et de connection
 
 exports.signup = (req, res, next) => {
   bcrypt

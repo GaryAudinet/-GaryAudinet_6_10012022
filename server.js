@@ -1,8 +1,12 @@
+// Import des packages requis
+
 const http = require('http');
 const app = require('./app');
 
 const dotenv = require('dotenv');
 dotenv.config();
+
+// Permet le retour d'un port valide et la connection du serveur sur ce dernier
 
 const normalizePort = val => {
   const port = parseInt(val, 10);

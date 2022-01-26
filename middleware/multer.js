@@ -1,4 +1,8 @@
+// Import des packages requis
+
 const multer = require('multer');
+
+// Types d'images, leur creation, puis l'export de multer
 
 const MIME_TYPES = {
   'image/jpg': 'jpg',

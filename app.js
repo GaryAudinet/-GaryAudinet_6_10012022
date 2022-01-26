@@ -1,3 +1,5 @@
+// Import de : Express, Dotenv, Helmet, path, mongoose, et les routes
+
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
@@ -11,6 +13,8 @@ app.use(helmet());
 const userRoutes = require('./routes/user');
 const sauceRoutes = require('./routes/sauce');
 
+// Connection à la base de donnée, et ajout du CORS
+
 mongoose.connect(process.env.MONGODB,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
@@ -23,6 +27,8 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
 });
+
+// Transformation de la requete en json, et appel des routes
 
 app.use(express.json());
 

@@ -1,9 +1,13 @@
+// Import des packages requis
+
 const express = require('express');
 const router = express.Router();
 
 const auth = require('../middleware/auth');
 const sauceCtrl = require('../controllers/sauce');
 const multer = require('../middleware/multer');
+
+// Creation des routes pour le CRUD, le like/dislike, puis exports router
 
 router.post('/', auth, multer, sauceCtrl.createSauce);
 router.get('/:id', auth, sauceCtrl.readSauce);
