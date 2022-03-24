@@ -1,4 +1,4 @@
-# -GaryAudinet_6_10012022 - Projet: Construisez une API sécurisée pour une application d'avis gastronomiques
+# Projet: Construisez une API sécurisée pour une application d'avis gastronomiques
 
 ## Cahier des charges
 
